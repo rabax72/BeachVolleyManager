@@ -17,6 +17,7 @@ import {
   Wallet,
   X,
   ClipboardList,
+  GraduationCap,
 } from 'lucide-react';
 import { useGame } from '../store/gameStore';
 import { formatMoney, t } from '../i18n';
@@ -37,6 +38,7 @@ const NAV = [
   { to: '/gioco/finanze', key: 'finance', icon: Wallet },
   { to: '/gioco/ranking', key: 'ranking', icon: BarChart3 },
   { to: '/gioco/storico', key: 'history', icon: History },
+  { to: '/gioco/tutorial', key: 'tutorial', icon: GraduationCap },
   { to: '/gioco/impostazioni', key: 'settings', icon: Settings },
 ] as const;
 

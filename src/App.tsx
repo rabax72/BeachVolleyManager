@@ -18,6 +18,7 @@ import { FinancePage } from './features/finance/FinancePage';
 import { RankingPage } from './features/ranking/RankingPage';
 import { HistoryPage } from './features/ranking/HistoryPage';
 import { SettingsPage } from './features/settings/SettingsPage';
+import { TutorialPage } from './features/tutorial/TutorialPage';
 
 function RequireGame({ children }: { children: ReactNode }) {
   const game = useGame((s) => s.game);
@@ -32,6 +33,7 @@ export function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/nuova" element={<NewGamePage />} />
+        <Route path="/tutorial/:lesson?" element={<TutorialPage inGame={false} />} />
         <Route
           path="/gioco"
           element={
@@ -54,6 +56,7 @@ export function App() {
           <Route path="ranking" element={<RankingPage />} />
           <Route path="storico" element={<HistoryPage />} />
           <Route path="impostazioni" element={<SettingsPage />} />
+          <Route path="tutorial/:lesson?" element={<TutorialPage inGame />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

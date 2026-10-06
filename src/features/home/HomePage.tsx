@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FolderOpen, Play, Plus, Trash2, Upload } from 'lucide-react';
+import { FolderOpen, GraduationCap, Play, Plus, Trash2, Upload } from 'lucide-react';
 import { useGame } from '../../store/gameStore';
 import { deleteSave, importJson, type SaveMeta } from '../../store/persistence';
 import { formatDate, t } from '../../i18n';
@@ -64,6 +64,12 @@ export function HomePage() {
             onClick={() => fileRef.current?.click()}
           >
             <Upload size={18} aria-hidden /> {t('home.import')}
+          </button>
+          <button
+            className="btn btn-secondary px-5 py-2.5 text-base"
+            onClick={() => navigate('/tutorial')}
+          >
+            <GraduationCap size={18} aria-hidden /> {t('home.tutorial')}
           </button>
           <input
             ref={fileRef}

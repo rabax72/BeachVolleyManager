@@ -21,6 +21,8 @@ npm run preview    # serve la build di produzione
 npm test           # test Vitest (regole, motore, tornei, stagioni, salvataggi, i18n)
 npm run lint       # ESLint
 npm run format     # Prettier
+npm run manual     # schermate di gioco + manuale PDF (vedi sotto)
+npm run icons      # rigenera logo e icone (Python + Pillow)
 ```
 
 La build usa percorsi relativi e il routing a hash, quindi `dist/` si può aprire da qualsiasi cartella statica.
@@ -50,18 +52,27 @@ src/
   features/    schermate, una cartella per area funzionale
   ui/          componenti condivisi (tabelle, radar, layout, modali)
   i18n/        dizionari di traduzione e funzione t()
-public/brand/  logo e icone generati (non modificare a mano)
-design/        immagine originale del logo
-scripts/       build-icons.py: rigenera logo e icone da design/logo.png
+public/brand/     logo e icone generati (non modificare a mano)
+public/tutorial/  schermate del tutorial (generate da npm run manual)
+design/           immagine originale del logo
+scripts/          build-icons.py (logo e icone), manual/ (schermate e manuale PDF)
 docs/
+  Manuale-Beach-Volley-Manager.pdf  manuale di gioco con schermate
+  manual/img/                       altre schermate usate dal manuale
   GUIDA.md         guida al gioco
   ARCHITETTURA.md  note di architettura ed estensione
 ```
 
 ## Documentazione
 
+- [Manuale di gioco in PDF](docs/Manuale-Beach-Volley-Manager.pdf), con schermate
 - [Guida al gioco](docs/GUIDA.md)
+- Nel gioco: sezione **Tutorial** (dal menu principale o dal menu laterale), 11 lezioni sulle basi
 - [Architettura e come estendere il gioco](docs/ARCHITETTURA.md) (nuove tattiche, tornei, lingue, migrazioni)
+
+## Manuale e schermate del tutorial
+
+`npm run manual` compila il gioco, gioca una carriera dimostrativa con seed fisso nel Chrome o nell'Edge installato (o nel browser indicato da `CHROME_PATH`) e cattura le schermate. Quelle del tutorial vanno in `public/tutorial/`, le altre in `docs/manual/img/`. Poi impagina e stampa `docs/Manuale-Beach-Volley-Manager.pdf`. Rilancialo dopo modifiche all'interfaccia. I testi del manuale sono in `scripts/manual/manual-content.ts`; i valori delle tabelle (livelli, punti, tattiche, staff) vengono dal codice del gioco.
 
 ## Logo e icone
 

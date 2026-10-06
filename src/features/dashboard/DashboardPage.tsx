@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { AlertTriangle, CalendarClock, Newspaper, Trophy, Wallet, UsersRound } from 'lucide-react';
+import { TutorialBanner } from '../tutorial/TutorialBanner';
 import { useGameState } from '../../store/gameStore';
 import { activePairOf, userPairs, userPlayers } from '../../engine/pairs';
 import { fullName } from '../../engine/player';
@@ -97,6 +98,7 @@ export function DashboardPage() {
   return (
     <div>
       <PageHeader title={t('dashboard.title')} />
+      <TutorialBanner />
       {g.gameOver && (
         <p
           role="alert"

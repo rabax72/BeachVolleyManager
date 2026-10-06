@@ -1,5 +1,7 @@
 # Guida al gioco
 
+Per iniziare c'è il **Tutorial** dentro il gioco (11 lezioni, dal menu principale o dal menu laterale). La versione completa e illustrata di questa guida è il [manuale in PDF](Manuale-Beach-Volley-Manager.pdf).
+
 ## Iniziare una carriera
 
 Da **Nuova carriera** scegli:

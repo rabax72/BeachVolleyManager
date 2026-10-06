@@ -20,6 +20,7 @@ export const it = {
     ranking: 'Ranking',
     history: 'Storico',
     settings: 'Impostazioni',
+    tutorial: 'Tutorial',
     menu: 'Menu',
     mainNav: 'Navigazione principale',
     closeMenu: 'Chiudi menu',
@@ -585,6 +586,7 @@ export const it = {
     delete: 'Elimina',
     deleteConfirm: 'Eliminare definitivamente il salvataggio “{name}”?',
     import: 'Importa salvataggio (JSON)',
+    tutorial: 'Tutorial',
   },
   newGame: {
     title: 'Nuova carriera',
@@ -603,6 +605,115 @@ export const it = {
     circuitHelp: 'Nel circuito misto gestisci una coppia maschile e una femminile.',
     defaultManager: 'Allenatore',
     defaultClub: 'Beach Club Riviera',
+  },
+  tutorial: {
+    title: 'Tutorial',
+    subtitle:
+      'Le basi del gioco in 11 lezioni brevi. Puoi consultarlo in qualsiasi momento dal menu.',
+    lessons: 'Lezioni',
+    progress: '{done} di {total} lezioni lette',
+    keyPoints: 'Punti chiave',
+    tip: 'Consiglio',
+    tryIt: 'Prova ora',
+    markRead: 'Segna come letta',
+    read: 'Letta',
+    prev: 'Lezione precedente',
+    next: 'Lezione successiva',
+    backHome: 'Torna al menu principale',
+    lessonOf: 'Lezione {n} di {total}',
+    screenshotAlt: 'Schermata: {title}',
+    banner: 'Prima volta su Beach Volley Manager? Il tutorial ti spiega le basi in pochi minuti.',
+    bannerOpen: 'Apri il tutorial',
+    bannerDismiss: 'Non ora',
+    items: {
+      goal: {
+        title: 'Il tuo obiettivo',
+        intro:
+          'Sei il manager di un club di beach volley. Gestisci coppie di giocatori (si gioca 2 contro 2), le iscrivi ai tornei del circuito e le fai crescere stagione dopo stagione, tenendo i conti in ordine.',
+        points:
+          'La Dashboard riassume la settimana: tornei in corso, prossimi eventi, avvisi, finanze e notizie.|Gli avvisi segnalano cosa richiede attenzione: infortuni, contratti in scadenza, giocatori senza coppia, sponsor da firmare.|La dirigenza ti assegna un obiettivo stagionale: raggiungerlo aumenta la reputazione del club.|Il gioco salva da solo a ogni settimana.',
+        tip: 'All’inizio firma subito due sponsor dalla pagina Finanze: senza entrate il bilancio va presto in rosso.',
+      },
+      time: {
+        title: 'Il tempo e la stagione',
+        intro:
+          'Il gioco avanza di una settimana alla volta con il pulsante «Avanza settimana» in alto a destra. Una stagione dura 30 settimane.',
+        points:
+          'Settimane 1–3: precampionato, per sponsor, mercato e allenamento.|Settimane 4–26: il circuito, con due tornei paralleli quasi ogni settimana.|Settimane 27–30: pausa invernale e stagione indoor, solo allenamento.|Avanzando, i tornei della settimana vengono completati e si applicano allenamenti, stipendi, sponsor ed eventi casuali.',
+        tip: 'Prima di avanzare controlla gli avvisi: è il momento giusto per iscrivere le coppie e sistemare gli allenamenti.',
+      },
+      players: {
+        title: 'Giocatori e attributi',
+        intro:
+          'Ogni giocatore ha 12 attributi da 1 a 20, raccolti nella scheda con un grafico radar. La valutazione complessiva (VAL) dipende dal ruolo.',
+        points:
+          'Tecnici: servizio, ricezione, alzata, attacco, muro, difesa.|Fisici: resistenza, velocità, salto. Mentali: lettura del gioco, mentalità, costanza.|Il bloccatore conta su muro, attacco e salto; il difensore su ricezione, difesa, alzata e velocità.|Morale, forma e fatica cambiano di settimana in settimana e incidono sul rendimento in partita.|Il potenziale indica fin dove può crescere: per i giocatori di altri club è solo una stima.',
+        tip: 'Ordina la tabella cliccando sulle intestazioni delle colonne per trovare subito i migliori in ogni fondamentale.',
+      },
+      pairs: {
+        title: 'Coppie, chimica e sinergia',
+        intro:
+          'Nei tornei giocano le coppie, non i singoli. Dalla pagina Coppie puoi formarle, scioglierle e impostarne la tattica predefinita.',
+        points:
+          'La sinergia dipende dai ruoli (bloccatore + difensore è l’ideale) e dalla compatibilità di carattere.|La chimica cresce partita dopo partita insieme e migliora il gioco di squadra.|Sciogliere una coppia fa perdere morale e annulla le iscrizioni future; riunire due ex compagni recupera parte della chimica.|Un giocatore senza coppia non gioca: l’avviso in Dashboard te lo ricorda.',
+        tip: 'Evita di cambiare spesso i partner: una coppia affiatata rende più della somma dei singoli.',
+      },
+      tournaments: {
+        title: 'Iscriversi ai tornei',
+        intro:
+          'Dal Calendario iscrivi le coppie ai tornei delle settimane future. Ci sono quattro livelli: Open, Nazionale, Challenger ed Elite Tour.',
+        points:
+          'Open e Nazionale sono aperti a tutti; Challenger ed Elite Tour solo alle coppie in alto nel ranking d’ingresso.|Ogni coppia gioca al massimo un torneo a settimana. L’iscrizione si paga subito, il viaggio nella settimana del torneo.|Formato: 4 gironi da 4, le prime due ai quarti, poi semifinali e finale.|Piazzamenti migliori portano punti ranking e premi in denaro.',
+        tip: 'Comincia dagli Open e dai Nazionali: accumuli punti per entrare nei Challenger senza giocare contro coppie troppo forti.',
+      },
+      match: {
+        title: 'Giocare una partita',
+        intro:
+          'Nella settimana del torneo apri il tabellone e premi «Gioca in diretta» per seguire la tua partita punto per punto. In alternativa puoi simularla.',
+        points:
+          'Si gioca al meglio dei 3 set: i primi due a 21, il terzo a 15, sempre con 2 punti di scarto. Si cambia campo ogni 7 punti (5 nel terzo set).|Puoi avviare, mettere in pausa, avanzare di un punto o simulare fino alla fine, scegliendo la velocità.|Cambia la tattica in qualsiasi momento: servizio, bersaglio, stile a muro, rischio in attacco, gestione delle energie.|Hai un timeout per set: interrompe l’inerzia degli avversari e fa recuperare un po’ di energia.',
+        tip: 'Con vento forte scegli un servizio sicuro; se i tuoi giocatori sono stanchi, imposta «Risparmio» nella gestione delle energie.',
+      },
+      training: {
+        title: 'Allenamento e staff',
+        intro:
+          'Ogni settimana i giocatori si allenano secondo il piano che scegli: un focus (un fondamentale, la parte fisica o mentale, oppure riposo) e un’intensità.',
+        points:
+          'L’intensità alta fa crescere più in fretta ma aumenta fatica e rischio di infortuni.|Con la fatica oltre 70 e allenamento intenso c’è sovrallenamento: il morale cala.|I giovani migliorano molto più dei veterani; dopo i 30 anni gli attributi fisici calano.|Lo staff aiuta: allenatore (tecnica), preparatore (fisico e recupero), fisioterapista (infortuni), analista video (lettura in partita e scouting).',
+        tip: 'Dopo un torneo impegnativo metti a riposo i giocatori più stanchi per una settimana.',
+      },
+      finance: {
+        title: 'Soldi e sponsor',
+        intro:
+          'Le spese sono stipendi di giocatori e staff, iscrizioni e viaggi. Le entrate arrivano da sponsor, premi dei tornei e dal contributo della dirigenza a inizio stagione.',
+        points:
+          'Puoi avere al massimo 2 sponsor; ognuno paga ogni settimana e dà un bonus se raggiungi il suo obiettivo.|Il riepilogo e i movimenti mostrano dove vanno i soldi.|Il bilancio in rosso ha conseguenze: richiamo dopo 4 settimane, svincolo del giocatore più pagato dopo 8, esonero dopo 14.',
+        tip: 'Scegli sponsor con obiettivi alla tua portata: il bonus di fine stagione può valere molte settimane di stipendi.',
+      },
+      market: {
+        title: 'Mercato e scouting',
+        intro:
+          'Nel Mercato cerchi nuovi giocatori, li osservi per stimarne il potenziale e presenti offerte. Nella stessa pagina gestisci i rinnovi.',
+        points:
+          'Gli svincolati costano solo lo stipendio; per chi ha un contratto con un altro club serve un indennizzo.|«Osserva» restringe la stima del potenziale e, sopra il 60% di conoscenza, rivela il carattere.|Un’offerta troppo bassa viene rifiutata con una controproposta; dopo 3 rifiuti il giocatore non tratta più per la stagione.|«Cerca giovani talenti» scova 3 giovani promesse. La rosa ha al massimo 10 giocatori.',
+        tip: 'Rinnova i contratti in scadenza prima della fine della stagione, altrimenti i giocatori lasciano il club.',
+      },
+      seasons: {
+        title: 'Fine stagione e carriera',
+        intro:
+          'Dopo la settimana 30 la stagione si chiude: si aggiornano ranking, albo d’oro e reputazione del club, e inizia la stagione successiva.',
+        points:
+          'I giocatori invecchiano, alcuni veterani si ritirano e arrivano nuovi talenti.|I contratti scaduti terminano: chi non hai rinnovato lascia il club.|Sponsor e dirigenza valutano gli obiettivi; la reputazione influisce su sponsor e trattative.|Lo Storico raccoglie albo d’oro, classifiche delle stagioni passate e storia del club.',
+        tip: 'Punta su qualche giovane di talento: tra due o tre stagioni può diventare il tuo giocatore di punta.',
+      },
+      firstSeason: {
+        title: 'Consigli per la prima stagione',
+        intro: 'Una scaletta per partire con il piede giusto.',
+        points:
+          'Firma 2 sponsor e dai un’occhiata all’obiettivo della dirigenza.|Il giovane della rosa non ha un partner: cercagli un compagno sul mercato oppure lascialo crescere in allenamento.|Iscrivi le coppie agli Open e ai Nazionali, alternando tornei e settimane di recupero.|Imposta piani di allenamento bilanciati a intensità media e controlla la fatica.|Gioca in diretta le partite importanti per adattare la tattica all’avversario e alle condizioni.',
+        tip: 'Nel Ranking puoi vedere il tuo ranking d’ingresso: quando la coppia entra tra le prime 44 si aprono i Challenger.',
+      },
+    },
   },
   settings: {
     title: 'Impostazioni',
