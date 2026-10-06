@@ -702,7 +702,7 @@ export const it = {
         intro:
           'Nella settimana del torneo apri il tabellone e premi «Gioca in diretta» per seguire la tua partita punto per punto. In alternativa puoi simularla.',
         points:
-          'Si gioca al meglio dei 3 set: i primi due a 21, il terzo a 15, sempre con 2 punti di scarto. Si cambia campo ogni 7 punti (5 nel terzo set).|Puoi avviare, mettere in pausa, avanzare di un punto o simulare fino alla fine, scegliendo la velocità.|Cambia la tattica in qualsiasi momento: servizio, bersaglio, stile a muro, rischio in attacco, gestione delle energie.|Hai un timeout per set: interrompe l’inerzia degli avversari e fa recuperare un po’ di energia.',
+          'Si gioca al meglio dei 3 set: i primi due a 21, il terzo a 15, sempre con 2 punti di scarto. Si cambia campo ogni 7 punti (5 nel terzo set).|Puoi avviare, mettere in pausa, avanzare di un punto o simulare fino alla fine, scegliendo la velocità.|Il campo mostra i quattro giocatori e la palla che ripercorre ogni scambio: battuta, ricezione, alzata, attacco, muro e difesa. La velocità regola anche l’animazione, «Rivedi il punto» ripete l’ultimo scambio e «Mostra campo» lo nasconde.|Cambia la tattica in qualsiasi momento: servizio, bersaglio, stile a muro, rischio in attacco, gestione delle energie.|Hai un timeout per set: interrompe l’inerzia degli avversari e fa recuperare un po’ di energia.',
         tip: 'Con vento forte scegli un servizio sicuro; se i tuoi giocatori sono stanchi, imposta «Risparmio» nella gestione delle energie.',
       },
       training: {

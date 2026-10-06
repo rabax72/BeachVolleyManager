@@ -78,6 +78,15 @@ class Recorder {
     console.log(`  schermata: ${name}`);
   }
 
+  /** Schermata di un solo elemento della pagina. */
+  async shotOf(name: string, selector: string): Promise<void> {
+    await this.page
+      .locator(selector)
+      .first()
+      .screenshot({ path: shotPath(name), type: 'jpeg', quality: 80 });
+    console.log(`  schermata: ${name}`);
+  }
+
   async nav(link: string, heading: string | RegExp): Promise<void> {
     await this.page.getByRole('link', { name: link, exact: true }).first().click();
     await this.page.getByRole('heading', { level: 1, name: heading }).waitFor();
@@ -159,6 +168,11 @@ async function captureGame(browser: Browser, url: string): Promise<void> {
   for (let i = 0; i < 6; i++) await page.getByRole('button', { name: 'Punto successivo' }).click();
   await r.waitToast();
   await r.shot('match');
+  // Il campo a metà scambio, a velocità lenta
+  await page.getByLabel('Velocità').selectOption('slow');
+  await page.getByRole('button', { name: 'Punto successivo' }).click();
+  await page.waitForTimeout(2600);
+  await r.shotOf('court', 'section:has([aria-label^="Campo da gioco"])');
   await page.getByRole('button', { name: 'Simula fino alla fine' }).click();
   await page.getByRole('button', { name: /Registra il risultato/ }).click();
   await page.waitForURL(/torneo/);

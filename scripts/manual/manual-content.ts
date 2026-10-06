@@ -246,9 +246,17 @@ ${figure(img, 'ranking', "Il ranking: classifica individuale, ranking d'ingresso
 <li>Nessuna sostituzione: la rotazione riguarda solo l'ordine al servizio.</li>
 <li>Un timeout per set per squadra.</li>
 </ul>
-${figure(img, 'match', 'La partita in diretta: punteggio, chi è al servizio, telecronaca, tattica, energia e statistiche.')}
+${figure(img, 'match', 'La partita in diretta: punteggio, chi è al servizio, controlli e campo di gioco; più in basso telecronaca, tattica, energia e statistiche.')}
 <h3>Controlli</h3>
 <p>Dal tabellone del torneo premi <em>Gioca in diretta</em>. Puoi avviare e mettere in pausa, avanzare di un punto, scegliere la velocità (lenta, normale, veloce, istantanea) o simulare fino alla fine. Con <em>Solo punti salienti</em> la telecronaca mostra solo i momenti chiave. A fine partita registri il risultato e torni al tabellone. In alternativa <em>Simula la fase</em> fa giocare in automatico tutte le partite della fase.</p>
+<h3>Il campo</h3>
+<p>Sotto i controlli il campo, visto dall'alto, mostra i quattro giocatori con i loro avatar (in blu il tuo club, in rosso gli avversari) e la palla che ripercorre l'ultimo scambio: battuta, ricezione, alzata, attacco, muro e difesa, con l'ombra che ne indica l'altezza. Il giocatore che tocca la palla è evidenziato e sotto il campo una didascalia descrive l'azione; a fine scambio compare l'esito (ace, muro punto, attacco fuori…) nella metà campo di chi fa il punto.</p>
+${figure(img, 'court', 'Il campo durante uno scambio: il muratore a rete, il difensore in fondo e la palla in volo.')}
+<ul>
+<li>Le squadre cambiano lato a ogni cambio campo; se c'è sole, è disegnato nell'angolo del campo.</li>
+<li>La velocità regola anche l'animazione; con <em>Istantanea</em> il campo mostra subito la posizione finale. Con <em>Avvia</em> il punto successivo parte quando l'animazione è finita.</li>
+<li><em>Rivedi il punto</em> ripete l'ultimo scambio; <em>Mostra campo</em> nasconde o mostra il campo, e la scelta viene ricordata.</li>
+</ul>
 <h3>Tattiche</h3>
 ${table(
   ['Opzione', 'Scelte', 'Effetto'],
