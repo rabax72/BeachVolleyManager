@@ -4,6 +4,8 @@ Gioco manageriale di beach volley giocabile nel browser, ispirato a Football Man
 
 Funziona interamente offline dopo la build: non c'è backend e i salvataggi restano nel `localStorage` del browser.
 
+**Gioca online:** https://rabax72.github.io/BeachVolleyManager/
+
 ## Requisiti
 
 - Node.js 20 o superiore (sviluppato con Node 24)
@@ -29,6 +31,10 @@ Script di sviluppo (non fanno parte dei test):
 npx tsx src/engine/dev/calibrate.ts   # bilanciamento del motore: % vittorie, ace, side-out
 npx tsx src/engine/dev/economy.ts     # andamento economico su più stagioni
 ```
+
+## Pubblicazione
+
+Il workflow [.github/workflows/deploy.yml](.github/workflows/deploy.yml) esegue lint, test e build a ogni push su `main` e pubblica `dist/` su GitHub Pages (Settings → Pages → Source: **GitHub Actions**).
 
 ## Stack
 
