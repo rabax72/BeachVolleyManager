@@ -10,7 +10,7 @@ import {
   type PlayerMatchStats,
   type TeamIndex,
 } from '../../engine/match';
-import type { Tactics } from '../../engine/types';
+import type { Player, Tactics } from '../../engine/types';
 import { formatPct, t } from '../../i18n';
 import { Badge, Card, EmptyState, Meter, PageHeader, Select } from '../../ui/components';
 import { ConditionsLine } from '../../ui/ConditionsLine';
@@ -18,6 +18,7 @@ import { defById } from '../../engine/season';
 import { tournamentTitle } from '../../ui/text';
 import { buildCommentary, teamLabel } from './commentary';
 import { TacticsForm } from './TacticsForm';
+import { PlayerAvatar } from '../../ui/avatar/Avatar';
 
 const SPEEDS = { slow: 1600, normal: 900, fast: 350, instant: 60 } as const;
 type SpeedKey = keyof typeof SPEEDS;
@@ -30,7 +31,15 @@ function closestSpeed(ms: number): SpeedKey {
   return best;
 }
 
-function Scoreboard({ s, side }: { s: MatchState; side: TeamIndex }) {
+function Scoreboard({
+  s,
+  side,
+  players,
+}: {
+  s: MatchState;
+  side: TeamIndex;
+  players: Record<string, Player>;
+}) {
   const current = s.sets[s.setIndex];
   return (
     <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 rounded-lg bg-sea-900 p-4 text-white">
@@ -62,6 +71,7 @@ function Scoreboard({ s, side }: { s: MatchState; side: TeamIndex }) {
                         aria-label={t('match.serving')}
                       />
                     )}
+                    {players[p.id] && <PlayerAvatar player={players[p.id]} size={36} decorative />}
                     <span>{p.name}</span>
                     <span className="text-xs text-sea-200">({t(`role.${p.role}`)})</span>
                   </li>
@@ -265,7 +275,7 @@ export function MatchPage() {
           )
         }
       />
-      <Scoreboard s={s} side={side} />
+      <Scoreboard s={s} side={side} players={game.players} />
 
       {s.finished ? (
         <div

@@ -4,7 +4,7 @@ import { FolderOpen, Play, Plus, Trash2, Upload } from 'lucide-react';
 import { useGame } from '../../store/gameStore';
 import { deleteSave, importJson, type SaveMeta } from '../../store/persistence';
 import { formatDate, t } from '../../i18n';
-import { Logo } from '../../ui/Logo';
+import { LogoFull } from '../../ui/Logo';
 import { ConfirmModal } from '../../ui/components';
 
 export function HomePage() {
@@ -39,10 +39,11 @@ export function HomePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-sea-200 via-sea-50 to-sand-200">
-      <main className="mx-auto flex max-w-3xl flex-col items-center px-4 py-12">
-        <Logo size={88} />
-        <h1 className="mt-4 text-center text-4xl font-extrabold text-sea-900">{t('app.title')}</h1>
-        <p className="mt-2 text-center text-sand-900">{t('app.subtitle')}</p>
+      <main className="mx-auto flex max-w-3xl flex-col items-center px-4 py-8">
+        {/* Il logo contiene già il nome del gioco: il titolo resta per i lettori di schermo. */}
+        <h1 className="sr-only">{t('app.title')}</h1>
+        <LogoFull size={340} alt={t('app.title')} />
+        <p className="mt-2 text-center text-lg font-semibold text-sea-900">{t('app.subtitle')}</p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           {game && (
             <button

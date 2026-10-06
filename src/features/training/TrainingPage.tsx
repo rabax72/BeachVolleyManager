@@ -9,6 +9,7 @@ import type { TrainingFocus, TrainingIntensity, TrainingPlan } from '../../engin
 import { t } from '../../i18n';
 import { AttrValue, Badge, Card, Meter, PageHeader, Select } from '../../ui/components';
 import { FOCUS_OPTIONS, INTENSITY_OPTIONS } from './options';
+import { PlayerAvatar } from '../../ui/avatar/Avatar';
 
 export function TrainingPage() {
   const g = useGameState();
@@ -96,13 +97,20 @@ export function TrainingPage() {
                 return (
                   <tr key={p.id}>
                     <td>
-                      <Link
-                        className="font-semibold text-sea-800 hover:underline"
-                        to={`/gioco/giocatore/${p.id}`}
-                      >
-                        {fullName(p)}
-                      </Link>
-                      <div className="text-xs text-sand-700">{t(`gender.${p.gender}`)}</div>
+                      <span className="inline-flex items-center gap-2">
+                        <PlayerAvatar player={p} size={30} decorative />
+                        <span>
+                          <Link
+                            className="font-semibold text-sea-800 hover:underline"
+                            to={`/gioco/giocatore/${p.id}`}
+                          >
+                            {fullName(p)}
+                          </Link>
+                          <span className="block text-xs text-sand-700">
+                            {t(`gender.${p.gender}`)}
+                          </span>
+                        </span>
+                      </span>
                     </td>
                     <td>{t(`role.${p.role}`)}</td>
                     <td className="num">{p.age}</td>

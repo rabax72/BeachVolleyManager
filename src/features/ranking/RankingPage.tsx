@@ -15,6 +15,7 @@ import { NATIONALITY_BY_CODE } from '../../data/names';
 import { formatNumber, t } from '../../i18n';
 import { Card, PageHeader, Tabs } from '../../ui/components';
 import { DataTable, type Column } from '../../ui/DataTable';
+import { PlayerAvatar } from '../../ui/avatar/Avatar';
 
 type Leader = 'aces' | 'kills' | 'blocks' | 'digs' | 'titles';
 
@@ -39,12 +40,15 @@ export function RankingPage() {
       header: t('common.name'),
       sortValue: (p) => p.lastName,
       render: (p) => (
-        <Link
-          className={`hover:underline ${p.contract.clubId === g.manager.clubId ? 'font-bold text-sea-800' : 'text-sea-900'}`}
-          to={`/gioco/giocatore/${p.id}`}
-        >
-          {fullName(p)}
-        </Link>
+        <span className="inline-flex items-center gap-2">
+          <PlayerAvatar player={p} size={26} decorative />
+          <Link
+            className={`hover:underline ${p.contract.clubId === g.manager.clubId ? 'font-bold text-sea-800' : 'text-sea-900'}`}
+            to={`/gioco/giocatore/${p.id}`}
+          >
+            {fullName(p)}
+          </Link>
+        </span>
       ),
     },
     {

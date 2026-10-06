@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { hasKey, interpolate, t } from './index';
+import { hasKey, interpolate, t, tg } from './index';
 
 function sourceFiles(dir: string): string[] {
   return readdirSync(dir).flatMap((name) => {
@@ -16,6 +16,13 @@ describe('i18n', () => {
   it('interpola i parametri', () => {
     expect(interpolate('Ciao {nome}!', { nome: 'Mare' })).toBe('Ciao Mare!');
     expect(t('common.weekShort', { week: 4 })).toBe('Sett. 4');
+  });
+
+  it('accorda al femminile quando esiste la variante _F', () => {
+    expect(tg('common.injured', 'F')).toBe('Infortunata');
+    expect(tg('common.injured', 'M')).toBe('Infortunato');
+    // Senza variante femminile usa il testo base
+    expect(tg('common.available', 'F')).toBe(t('common.available'));
   });
 
   it('restituisce la chiave se manca la traduzione', () => {

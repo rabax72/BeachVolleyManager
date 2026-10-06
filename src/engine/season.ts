@@ -438,7 +438,7 @@ function finishWeekMut(s: GameState): void {
           true,
         );
       } else if (wasInjured && !out.player.injury) {
-        pushNews(s, 'news.recovered', { player: fullName(p) });
+        pushNews(s, 'news.recovered', { player: fullName(p), g: p.gender });
       }
       if (out.overtrained) pushNews(s, 'news.overtrained', { player: fullName(p) }, true);
     }

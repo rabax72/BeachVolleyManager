@@ -8,16 +8,22 @@ export function PageHeader({
   title,
   subtitle,
   actions,
+  leading,
 }: {
   title: string;
   subtitle?: ReactNode;
   actions?: ReactNode;
+  /** Elemento a sinistra del titolo (es. avatar). */
+  leading?: ReactNode;
 }) {
   return (
     <header className="mb-4 flex flex-wrap items-end justify-between gap-3">
-      <div>
-        <h1 className="text-2xl font-extrabold text-sea-900">{title}</h1>
-        {subtitle && <p className="mt-1 max-w-3xl text-sm text-sand-700">{subtitle}</p>}
+      <div className="flex items-center gap-4">
+        {leading}
+        <div>
+          <h1 className="text-2xl font-extrabold text-sea-900">{title}</h1>
+          {subtitle && <p className="mt-1 max-w-3xl text-sm text-sand-700">{subtitle}</p>}
+        </div>
       </div>
       {actions && <div className="flex flex-wrap gap-2">{actions}</div>}
     </header>

@@ -7,9 +7,10 @@ import { pairEntryRanking } from '../../engine/ranking';
 import { clubSeasonStatsWithRank, pairName, weekDefs } from '../../engine/season';
 import { MAX_SPONSORS, NEGATIVE_WARNING_WEEKS, objectiveProgress } from '../../engine/finance';
 import { STAFF_ROLES } from '../../engine/generation';
-import { formatMoney, t } from '../../i18n';
+import { formatMoney, t, tg } from '../../i18n';
 import { Badge, Card, EmptyState, Meter, PageHeader, Stat } from '../../ui/components';
 import { newsText, objectiveText, tournamentTitle } from '../../ui/text';
+import { PlayerAvatar } from '../../ui/avatar/Avatar';
 import type { GameState } from '../../engine/types';
 
 function alertsFor(g: GameState): { text: string; tone: 'bad' | 'warn'; to: string }[] {
@@ -20,7 +21,7 @@ function alertsFor(g: GameState): { text: string; tone: 'bad' | 'warn'; to: stri
       out.push({
         tone: 'bad',
         to: `/gioco/giocatore/${p.id}`,
-        text: t('dashboard.alertInjury', {
+        text: tg('dashboard.alertInjury', p.gender, {
           player: fullName(p),
           injury: t(`injury.${p.injury.key}`),
           weeks: p.injury.weeksLeft,
@@ -38,7 +39,7 @@ function alertsFor(g: GameState): { text: string; tone: 'bad' | 'warn'; to: stri
       out.push({
         tone: 'warn',
         to: '/gioco/allenamento',
-        text: t('dashboard.alertFatigue', { player: fullName(p), n: p.fatigue }),
+        text: tg('dashboard.alertFatigue', p.gender, { player: fullName(p), n: p.fatigue }),
       });
     if (p.morale <= 35)
       out.push({
@@ -242,9 +243,21 @@ export function DashboardPage() {
                     return (
                       <tr key={p.id}>
                         <td className="font-semibold">
-                          <Link className="text-sea-800 hover:underline" to="/gioco/coppie">
-                            {pairName(g, p.id)}
-                          </Link>
+                          <span className="inline-flex items-center gap-2">
+                            <span className="inline-flex -space-x-2">
+                              {p.playerIds.map((id) => (
+                                <PlayerAvatar
+                                  key={id}
+                                  player={g.players[id]}
+                                  size={30}
+                                  decorative
+                                />
+                              ))}
+                            </span>
+                            <Link className="text-sea-800 hover:underline" to="/gioco/coppie">
+                              {pairName(g, p.id)}
+                            </Link>
+                          </span>
                         </td>
                         <td>{t(`gender.${p.gender}`)}</td>
                         <td>

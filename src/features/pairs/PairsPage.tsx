@@ -9,7 +9,7 @@ import { formPair, setPairTactics, splitPair } from '../../engine/actions';
 import { DEFAULT_TACTICS } from '../../engine/match';
 import { pairName } from '../../engine/season';
 import type { Pair } from '../../engine/types';
-import { formatNumber, t } from '../../i18n';
+import { formatNumber, t, tg } from '../../i18n';
 import {
   AttrValue,
   Badge,
@@ -20,6 +20,7 @@ import {
   PageHeader,
 } from '../../ui/components';
 import { TacticsForm } from '../match/TacticsForm';
+import { PlayerAvatar } from '../../ui/avatar/Avatar';
 
 function PairCard({ pair }: { pair: Pair }) {
   const g = useGameState();
@@ -49,6 +50,7 @@ function PairCard({ pair }: { pair: Pair }) {
           <ul className="space-y-2 text-sm">
             {[a, b].map((p) => (
               <li key={p.id} className="flex flex-wrap items-center gap-2">
+                <PlayerAvatar player={p} size={40} decorative />
                 <AttrValue value={playerOverall(p)} label={t('common.overall')} />
                 <Link
                   className="font-semibold text-sea-800 hover:underline"
@@ -57,7 +59,7 @@ function PairCard({ pair }: { pair: Pair }) {
                   {fullName(p)}
                 </Link>
                 <Badge tone="sea">{t(`role.${p.role}`)}</Badge>
-                {p.injury && <Badge tone="bad">{t('common.injured')}</Badge>}
+                {p.injury && <Badge tone="bad">{tg('common.injured', p.gender)}</Badge>}
               </li>
             ))}
           </ul>

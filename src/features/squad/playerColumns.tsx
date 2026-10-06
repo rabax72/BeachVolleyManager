@@ -7,6 +7,7 @@ import { pairName } from '../../engine/season';
 import { NATIONALITY_BY_CODE } from '../../data/names';
 import { formatMoney, formatNumber, t } from '../../i18n';
 import { AttrValue, Badge, Meter } from '../../ui/components';
+import { PlayerAvatar } from '../../ui/avatar/Avatar';
 
 export type ColumnKey =
   | 'name'
@@ -38,18 +39,21 @@ export function playerColumns(g: GameState, keys: ColumnKey[]): Column<Player>[]
         header: t('common.name'),
         sortValue: (p) => `${p.lastName} ${p.firstName}`,
         render: (p) => (
-          <span className="inline-flex flex-col items-start gap-0.5">
-            <Link
-              className="font-semibold text-sea-800 hover:underline"
-              to={`/gioco/giocatore/${p.id}`}
-            >
-              {fullName(p)}
-            </Link>
-            {p.injury && (
-              <Badge tone="bad">
-                {t(`injury.${p.injury.key}`)} · {t('common.weeks', { n: p.injury.weeksLeft })}
-              </Badge>
-            )}
+          <span className="inline-flex items-center gap-2">
+            <PlayerAvatar player={p} size={30} decorative />
+            <span className="inline-flex flex-col items-start gap-0.5">
+              <Link
+                className="font-semibold text-sea-800 hover:underline"
+                to={`/gioco/giocatore/${p.id}`}
+              >
+                {fullName(p)}
+              </Link>
+              {p.injury && (
+                <Badge tone="bad">
+                  {t(`injury.${p.injury.key}`)} · {t('common.weeks', { n: p.injury.weeksLeft })}
+                </Badge>
+              )}
+            </span>
           </span>
         ),
       },

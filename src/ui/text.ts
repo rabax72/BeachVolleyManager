@@ -7,7 +7,7 @@ import type {
   Transaction,
   TournamentDef,
 } from '../engine/types';
-import { formatMoney, hasKey, t, type Params } from '../i18n';
+import { formatMoney, hasKey, t, tg, type Params } from '../i18n';
 
 const MONEY_PARAMS = ['prize', 'amount', 'grant', 'salary', 'weekly', 'cost'];
 
@@ -21,7 +21,8 @@ export function newsText(n: NewsItem, g: GameState): string {
   if (typeof p.role === 'string') p.roleLabel = t(`staff.roles.${p.role}`).toLowerCase();
   if (typeof p.attr === 'string') p.attrLabel = t(`attr.${p.attr}`).toLowerCase();
   if (typeof p.until === 'number') p.untilYear = g.startYear + p.until - 1;
-  return t(n.key, p);
+  // Il parametro g (genere del giocatore) sceglie la variante femminile del testo
+  return tg(n.key, typeof n.params.g === 'string' ? n.params.g : undefined, p);
 }
 
 export const tournamentTitle = (d: TournamentDef): string => `${t(`tier.${d.tier}`)} ${d.name}`;

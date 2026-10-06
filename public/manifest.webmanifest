@@ -1,0 +1,15 @@
+{
+  "name": "Beach Volley Manager",
+  "short_name": "BV Manager",
+  "description": "Gioco manageriale di beach volley",
+  "lang": "it",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fdfaf3",
+  "theme_color": "#0b3640",
+  "icons": [
+    { "src": "brand/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "brand/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

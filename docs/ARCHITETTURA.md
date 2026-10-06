@@ -56,6 +56,14 @@ Le pendenze delle curve logistiche sono raccolte in `BALANCE`. Il test statistic
 - `store/persistence.ts` gestisce gli slot in `localStorage` (compressi con lz-string), l'indice dei salvataggi, l'export/import JSON e le migrazioni.
 - `features/*` contiene una schermata per area; `ui/*` i componenti condivisi (`DataTable` ordinabile e paginata, `Radar` SVG, `Modal`, `Meter`, `ErrorBoundary`).
 
+## Avatar dei giocatori
+
+Gli avatar cartoon sono disegnati in SVG da `src/ui/avatar/Avatar.tsx`. I tratti (carnagione, capelli, barba, accessori, spalle) sono calcolati da `src/ui/avatar/avatarTraits.ts` a partire da id e nome del giocatore, con pesi diversi per nazionalità: non vengono salvati, ma restano sempre uguali per lo stesso giocatore. Espressione (dal morale) e cerotto (infortunio) seguono lo stato del momento; la canotta ha il colore del club.
+
+## Testi al femminile
+
+`tg(chiave, genere, parametri)` (in `src/i18n/index.ts`) usa la variante `chiave_F` per le giocatrici, se esiste. Per un nuovo testo riferito a una persona basta aggiungere la variante `_F` nel dizionario e usare `tg`. Le notizie del motore passano il genere nel parametro `g`.
+
 ## Come estendere
 
 ### Aggiungere una tattica

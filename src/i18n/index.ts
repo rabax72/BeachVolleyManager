@@ -41,6 +41,18 @@ export function t(key: string, params?: Params): string {
   return interpolate(v, params);
 }
 
+/**
+ * Come t(), ma per testi riferiti a una persona: con genere 'F' usa la variante `chiave_F`
+ * se esiste (es. 'infortunato' / 'infortunata').
+ */
+export function tg(key: string, gender: string | undefined, params?: Params): string {
+  const female = `${key}_F`;
+  if (gender === 'F' && typeof lookup(DICTIONARIES[current], female) === 'string') {
+    return t(female, params);
+  }
+  return t(key, params);
+}
+
 export const hasKey = (key: string): boolean =>
   typeof lookup(DICTIONARIES[current], key) === 'string';
 

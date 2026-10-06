@@ -171,7 +171,7 @@ export function releasePlayer(state: GameState, playerId: string): GameState {
   return produce(state, (s) => {
     addTransaction(s, 'transfer', -cost, fullName(p));
     releasePlayerMut(s, playerId);
-    pushNews(s, 'news.released', { player: fullName(p), cost });
+    pushNews(s, 'news.released', { player: fullName(p), cost, g: p.gender });
   });
 }
 

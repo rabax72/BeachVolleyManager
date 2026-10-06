@@ -17,7 +17,7 @@ import {
   type TrainingIntensity,
 } from '../../engine/types';
 import { NATIONALITY_BY_CODE } from '../../data/names';
-import { formatMoney, formatNumber, t } from '../../i18n';
+import { formatMoney, formatNumber, t, tg } from '../../i18n';
 import {
   AttrValue,
   Badge,
@@ -29,6 +29,7 @@ import {
   Select,
 } from '../../ui/components';
 import { Radar } from '../../ui/Radar';
+import { PlayerAvatar } from '../../ui/avatar/Avatar';
 import { OfferModal } from '../market/OfferModal';
 import { FOCUS_OPTIONS, INTENSITY_OPTIONS } from '../training/options';
 
@@ -83,6 +84,7 @@ export function PlayerPage() {
         <ArrowLeft size={16} aria-hidden /> {t('nav.squad')}
       </Link>
       <PageHeader
+        leading={<PlayerAvatar player={p} size={96} />}
         title={fullName(p)}
         subtitle={
           <span className="flex flex-wrap gap-2">
@@ -141,7 +143,9 @@ export function PlayerPage() {
             <dd className="font-semibold">{t(`hand.${p.hand}`)}</dd>
             <dt className="text-sand-700">{t('character.label')}</dt>
             <dd className="font-semibold">
-              {knowledge >= 60 ? t(`character.${p.hidden.character}`) : t('character.hidden')}
+              {knowledge >= 60
+                ? tg(`character.${p.hidden.character}`, p.gender)
+                : t('character.hidden')}
             </dd>
             <dt className="text-sand-700">{t('common.overall')}</dt>
             <dd>
@@ -321,7 +325,7 @@ export function PlayerPage() {
         onConfirm={() => {
           update((s) => releasePlayer(s, p.id));
           showToast(
-            t('news.released', {
+            tg('news.released', p.gender, {
               player: fullName(p),
               cost: formatMoney(releaseCost(p, g.season)),
             }),

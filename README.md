@@ -50,6 +50,9 @@ src/
   features/    schermate, una cartella per area funzionale
   ui/          componenti condivisi (tabelle, radar, layout, modali)
   i18n/        dizionari di traduzione e funzione t()
+public/brand/  logo e icone generati (non modificare a mano)
+design/        immagine originale del logo
+scripts/       build-icons.py: rigenera logo e icone da design/logo.png
 docs/
   GUIDA.md         guida al gioco
   ARCHITETTURA.md  note di architettura ed estensione
@@ -60,6 +63,16 @@ docs/
 - [Guida al gioco](docs/GUIDA.md)
 - [Architettura e come estendere il gioco](docs/ARCHITETTURA.md) (nuove tattiche, tornei, lingue, migrazioni)
 
+## Logo e icone
+
+L'originale è in `design/logo.png`. Dopo averlo sostituito, rigenera le versioni ottimizzate (richiede Python con Pillow):
+
+```bash
+python scripts/build-icons.py
+```
+
+Vengono creati in `public/brand/` il logo completo con sfondo trasparente (home) e l'icona del pallone in più formati (favicon, barra laterale, icona per smartphone).
+
 ## Note
 
-Tutti i nomi di giocatori, club, sponsor, nazionalità e località sono inventati. Le icone sono di lucide-react e le illustrazioni sono SVG/CSS originali.
+Tutti i nomi di giocatori, club, sponsor, nazionalità e località sono inventati. Le icone sono di lucide-react; gli avatar dei giocatori sono disegnati in SVG dal codice.
