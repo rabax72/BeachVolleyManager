@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Circle, FastForward, Hand, Pause, Play, StepForward, Sun } from 'lucide-react';
+import { Circle, FastForward, Hand, Pause, Play, RotateCcw, StepForward, Sun } from 'lucide-react';
 import { useGame } from '../../store/gameStore';
 import {
   canCallTimeout,
@@ -19,9 +19,12 @@ import { tournamentTitle } from '../../ui/text';
 import { buildCommentary, teamLabel } from './commentary';
 import { TacticsForm } from './TacticsForm';
 import { PlayerAvatar } from '../../ui/avatar/Avatar';
+import { CourtView } from './court/CourtView';
 
 const SPEEDS = { slow: 1600, normal: 900, fast: 350, instant: 60 } as const;
 type SpeedKey = keyof typeof SPEEDS;
+/** Moltiplicatore della durata delle animazioni del campo (0 = nessuna animazione). */
+const COURT_SCALE: Record<SpeedKey, number> = { slow: 1.5, normal: 1, fast: 0.55, instant: 0 };
 
 function closestSpeed(ms: number): SpeedKey {
   let best: SpeedKey = 'normal';
@@ -41,29 +44,24 @@ function Scoreboard({
   players: Record<string, Player>;
 }) {
   const current = s.sets[s.setIndex];
+  // Su mobile il punteggio va in alto a tutta larghezza e le coppie si affiancano sotto.
   return (
-    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 rounded-lg bg-sea-900 p-4 text-white">
+    <div className="grid grid-cols-2 items-center gap-3 rounded-lg bg-sea-900 p-3 text-white sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:p-4">
       {([0, 1] as TeamIndex[]).map((team) => {
         const tm = s.setup.teams[team];
         const align = team === 0 ? 'text-left' : 'text-right order-3';
+        const justify = team === 0 ? 'justify-start' : 'justify-end';
         return (
-          <div key={team} className={align}>
-            <div
-              className="flex flex-wrap items-center gap-2 font-bold"
-              style={{ justifyContent: team === 0 ? 'flex-start' : 'flex-end' }}
-            >
+          <div key={team} className={`min-w-0 self-start sm:self-center ${align}`}>
+            <div className={`flex flex-wrap items-center gap-x-2 gap-y-1 font-bold ${justify}`}>
               {team === side && <Badge tone="sea">{t('common.yourClub')}</Badge>}
-              <span className="text-lg">{teamLabel(s.setup, team)}</span>
+              <span className="text-base break-words sm:text-lg">{teamLabel(s.setup, team)}</span>
             </div>
             <ul className="mt-1 space-y-0.5 text-sm text-sea-100">
               {tm.players.map((p, i) => {
                 const serving = !s.finished && s.servingTeam === team && s.currentServer === i;
                 return (
-                  <li
-                    key={p.id}
-                    className="flex items-center gap-1.5"
-                    style={{ justifyContent: team === 0 ? 'flex-start' : 'flex-end' }}
-                  >
+                  <li key={p.id} className={`flex items-center gap-1.5 ${justify}`}>
                     {serving && (
                       <Circle
                         size={10}
@@ -72,16 +70,17 @@ function Scoreboard({
                       />
                     )}
                     {players[p.id] && <PlayerAvatar player={players[p.id]} size={36} decorative />}
-                    <span>{p.name}</span>
-                    <span className="text-xs text-sea-200">({t(`role.${p.role}`)})</span>
+                    <span className="min-w-0 break-words">
+                      {p.name}{' '}
+                      <span className="text-xs whitespace-nowrap text-sea-200">
+                        ({t(`role.${p.role}`)})
+                      </span>
+                    </span>
                   </li>
                 );
               })}
             </ul>
-            <div
-              className="mt-2 flex flex-wrap items-center gap-2 text-xs"
-              style={{ justifyContent: team === 0 ? 'flex-start' : 'flex-end' }}
-            >
+            <div className={`mt-2 flex flex-wrap items-center gap-2 text-xs ${justify}`}>
               {s.timeoutsUsed[team] && <Badge tone="warn">{t('match.timeoutUsed')}</Badge>}
               {s.sunFacing === team && s.setup.conditions.sun > 0 && (
                 <span className="inline-flex items-center gap-1 text-sand-200">
@@ -92,7 +91,7 @@ function Scoreboard({
           </div>
         );
       })}
-      <div className="order-2 text-center">
+      <div className="order-first col-span-2 text-center sm:order-2 sm:col-span-1">
         <div className="text-xs tracking-wide text-sea-200 uppercase">
           {t('match.set', { n: s.setIndex + 1 })}
         </div>
@@ -222,20 +221,26 @@ export function MatchPage() {
   const live = useGame((s) => s.live);
   const game = useGame((s) => s.game);
   const settings = useGame((s) => s.settings);
-  const { liveStep, liveTimeout, liveTactics, liveFinish, liveCommit, showToast } =
+  const { liveStep, liveTimeout, liveTactics, liveFinish, liveCommit, showToast, updateSettings } =
     useGame.getState();
   const navigate = useNavigate();
   const [playing, setPlaying] = useState(false);
   const [speed, setSpeed] = useState<SpeedKey>(closestSpeed(settings.matchSpeed));
   const [onlyHighlights, setOnlyHighlights] = useState(false);
   const [draft, setDraft] = useState<Tactics | null>(null);
+  /** Il campo sta animando uno scambio: la riproduzione automatica aspetta. */
+  const [courtBusy, setCourtBusy] = useState(false);
+  const [replayKey, setReplayKey] = useState(0);
+  const showCourt = settings.showCourt;
 
   const finished = live?.state.finished ?? false;
+  const eventCount = live?.state.events.length ?? 0;
+  const waiting = showCourt && courtBusy;
   useEffect(() => {
-    if (!playing || finished) return;
-    const id = setInterval(() => useGame.getState().liveStep(), SPEEDS[speed]);
-    return () => clearInterval(id);
-  }, [playing, finished, speed]);
+    if (!playing || finished || waiting) return;
+    const id = setTimeout(() => useGame.getState().liveStep(), SPEEDS[speed]);
+    return () => clearTimeout(id);
+  }, [playing, finished, speed, waiting, eventCount]);
 
   const commentary = useMemo(
     () => (live ? buildCommentary(live.state.setup, live.state.events) : []),
@@ -261,6 +266,10 @@ export function MatchPage() {
   const tactics = draft ?? s.tactics[side];
   const lines = [...commentary].reverse().filter((l) => !onlyHighlights || l.highlight);
   const won = s.winner === side;
+  const lastLine = commentary.at(-1);
+  const banner =
+    lastLine && lastLine.kind !== 'point' && lastLine.kind !== 'tactics' ? lastLine.text : null;
+  const canReplay = s.events.some((e) => e.kind === 'point' && e.actions);
 
   return (
     <div>
@@ -340,7 +349,43 @@ export function MatchPage() {
         </div>
       )}
 
-      <div className="mt-4 grid gap-4 xl:grid-cols-[1fr_1fr]">
+      <label className="mt-3 flex w-fit items-center gap-2 text-sm font-semibold">
+        <input
+          type="checkbox"
+          checked={showCourt}
+          onChange={(e) => updateSettings({ showCourt: e.target.checked })}
+        />
+        {t('match.showCourt')}
+      </label>
+      {showCourt && (
+        <Card
+          title={t('match.court.title')}
+          className="mt-3"
+          actions={
+            <button
+              className="btn btn-ghost"
+              onClick={() => setReplayKey((k) => k + 1)}
+              disabled={!canReplay || courtBusy}
+            >
+              <RotateCcw size={16} aria-hidden /> {t('match.court.replay')}
+            </button>
+          }
+        >
+          <div className="mx-auto max-w-3xl">
+            <CourtView
+              s={s}
+              side={side}
+              players={game.players}
+              replayKey={replayKey}
+              speedScale={COURT_SCALE[speed]}
+              banner={banner}
+              onBusyChange={setCourtBusy}
+            />
+          </div>
+        </Card>
+      )}
+
+      <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-2">
         <Card
           title={t('match.commentary')}
           actions={

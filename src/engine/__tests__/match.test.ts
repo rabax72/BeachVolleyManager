@@ -61,6 +61,33 @@ describe('motore partita', () => {
     }
   });
 
+  it('registra i tocchi di ogni scambio coerenti con l’esito', () => {
+    const last: Record<string, [string, string]> = {
+      ace: ['reception', 'error'],
+      serveError: ['serve', 'error'],
+      kill: ['attack', 'point'],
+      block: ['block', 'point'],
+      attackError: ['attack', 'error'],
+      setError: ['set', 'error'],
+    };
+    for (let seed = 0; seed < 20; seed++) {
+      let s: MatchState = createMatch(setupFor(12, 12, seed));
+      while (!s.finished) s = playRally(s);
+      for (const e of s.events) {
+        if (e.kind !== 'point') continue;
+        const acts = e.actions ?? [];
+        expect(acts[0]?.kind).toBe('serve');
+        const end = acts[acts.length - 1];
+        expect([end.kind, end.result]).toEqual(last[e.cause]);
+        // Il protagonista del punto coincide con chi ha eseguito l'ultimo tocco (salvo l'ace).
+        const actor = e.cause === 'ace' ? acts[0] : end;
+        expect(s.setup.teams[actor.team].players[actor.player].id).toBe(e.playerId);
+        // Solo l'ultimo tocco chiude lo scambio.
+        expect(acts.slice(0, -1).every((a) => a.result === 'ok' || a.kind === 'serve')).toBe(true);
+      }
+    }
+  });
+
   it('segnala il cambio campo ogni 7 punti (5 nel terzo set)', () => {
     let s: MatchState = createMatch(setupFor(12, 12, 7));
     while (!s.finished) s = playRally(s);

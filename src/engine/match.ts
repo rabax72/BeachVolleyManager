@@ -62,6 +62,18 @@ export interface PlayerMatchStats {
 
 export type PointCause = 'ace' | 'serveError' | 'kill' | 'block' | 'attackError' | 'setError';
 
+/** Tocco di palla all'interno di uno scambio, per la rappresentazione grafica. */
+export interface RallyAction {
+  kind: 'serve' | 'reception' | 'set' | 'attack' | 'block' | 'dig';
+  team: TeamIndex;
+  /** Indice del giocatore nella coppia. */
+  player: number;
+  /** ok = la palla resta in gioco; point = punto diretto; error = errore. */
+  result: 'ok' | 'point' | 'error';
+  /** Qualità del tocco 0–1 (ricezione, alzata, difesa). */
+  quality?: number;
+}
+
 export type MatchEvent =
   | {
       kind: 'point';
@@ -77,6 +89,10 @@ export type MatchEvent =
       score: [number, number];
       setPoint: TeamIndex | null;
       highlight: boolean;
+      /** Sequenza dei tocchi dello scambio (assente nei salvataggi precedenti). */
+      actions?: RallyAction[];
+      /** Squadra con il sole di fronte durante lo scambio (prima dell'eventuale cambio campo). */
+      sunFacing?: TeamIndex;
     }
   | { kind: 'sideSwitch'; setIndex: number; score: [number, number] }
   | { kind: 'setEnd'; setIndex: number; score: [number, number]; winner: TeamIndex }
@@ -250,6 +266,7 @@ interface Ctx {
   s: MatchState;
   rng: Rng;
   pressure: boolean;
+  actions: RallyAction[];
 }
 
 /** Altezza relativa alla media del genere, in decine di cm. */
@@ -281,7 +298,7 @@ function eff(ctx: Ctx, team: TeamIndex, idx: number, key: AttributeKey): number 
   return v;
 }
 
-function blockerIndex(team: MatchTeam): number {
+export function blockerIndex(team: MatchTeam): number {
   const [a, b] = team.players;
   if (a.role !== b.role) return a.role === 'blocker' ? 0 : 1;
   return a.attrs.block >= b.attrs.block ? 0 : 1;
@@ -331,6 +348,7 @@ interface PointOutcome {
   playerId: string;
   otherId?: string;
   touches: number;
+  actions?: RallyAction[];
 }
 
 /**
@@ -364,6 +382,7 @@ function attackSequence(
   );
   if (rng.chance(pSetErr)) {
     aStats[setter].setErrors++;
+    ctx.actions.push({ kind: 'set', team: att, player: setter, result: 'error' });
     return {
       outcome: { team: def, cause: 'setError', playerId: attTeam.players[setter].id, touches: 0 },
       digger: 0,
@@ -375,6 +394,7 @@ function attackSequence(
     0,
     1,
   );
+  ctx.actions.push({ kind: 'set', team: att, player: setter, result: 'ok', quality: setQ });
 
   // Attacco
   drain(ctx, att, attacker, 0.6);
@@ -399,6 +419,7 @@ function attackSequence(
   );
   if (rng.chance(pAttErr)) {
     aStats[attacker].attackErrors++;
+    ctx.actions.push({ kind: 'attack', team: att, player: attacker, result: 'error' });
     return {
       outcome: {
         team: def,
@@ -429,6 +450,10 @@ function attackSequence(
     heightAdv(defTeam.players[bIdx]) * 0.45;
   const pBlock = logistic(BALANCE.blockBase + (blockSkill - attackPower) * BALANCE.blockSlope);
   if (rng.chance(pBlock)) {
+    ctx.actions.push(
+      { kind: 'attack', team: att, player: attacker, result: 'ok' },
+      { kind: 'block', team: def, player: bIdx, result: 'point' },
+    );
     dStats[bIdx].blocks++;
     dStats[bIdx].points++;
     aStats[attacker].blockedAttacks++;
@@ -455,6 +480,7 @@ function attackSequence(
     coverAdj;
   const pKill = logistic(BALANCE.killBase + (attackPower - digSkill) * BALANCE.killSlope);
   if (rng.chance(pKill)) {
+    ctx.actions.push({ kind: 'attack', team: att, player: attacker, result: 'point' });
     aStats[attacker].kills++;
     aStats[attacker].points++;
     return {
@@ -465,6 +491,10 @@ function attackSequence(
   }
   dStats[dIdx].digs++;
   const digQ = clamp(0.35 + (digSkill - attackPower) * BALANCE.digSlope + rng.normal(0, 0.2), 0, 1);
+  ctx.actions.push(
+    { kind: 'attack', team: att, player: attacker, result: 'ok' },
+    { kind: 'dig', team: def, player: dIdx, result: 'ok', quality: digQ },
+  );
   return { outcome: null, digger: dIdx, digQ };
 }
 
@@ -476,7 +506,7 @@ function playRallyMut(s: MatchState): void {
   const pressure =
     setPointFor(score[0], score[1], s.setIndex) !== null ||
     Math.min(score[0], score[1]) >= target - 3;
-  const ctx: Ctx = { s, rng, pressure };
+  const ctx: Ctx = { s, rng, pressure, actions: [] };
   const serving = s.servingTeam;
   const receiving = other(serving);
   const server = s.currentServer;
@@ -507,6 +537,7 @@ function playRallyMut(s: MatchState): void {
   );
   if (rng.chance(pServeErr)) {
     s.stats[serving][server].serveErrors++;
+    ctx.actions.push({ kind: 'serve', team: serving, player: server, result: 'error' });
     outcome = { team: receiving, cause: 'serveError', playerId: serverP.id, touches };
   } else {
     const recv = chooseReceiver(ctx, serving);
@@ -522,6 +553,10 @@ function playRallyMut(s: MatchState): void {
     drain(ctx, receiving, recv, 0.45);
     touches++;
     if (rng.chance(logistic(BALANCE.aceBase + diff * BALANCE.aceSlope))) {
+      ctx.actions.push(
+        { kind: 'serve', team: serving, player: server, result: 'point' },
+        { kind: 'reception', team: receiving, player: recv, result: 'error' },
+      );
       s.stats[serving][server].aces++;
       s.stats[serving][server].points++;
       s.stats[receiving][recv].receptionErrors++;
@@ -535,6 +570,10 @@ function playRallyMut(s: MatchState): void {
     } else {
       const q = clamp(0.55 - diff * BALANCE.receptionSlope + rng.normal(0, 0.18), 0, 1);
       if (q >= 0.5) s.stats[receiving][recv].goodReceptions++;
+      ctx.actions.push(
+        { kind: 'serve', team: serving, player: server, result: 'ok' },
+        { kind: 'reception', team: receiving, player: recv, result: 'ok', quality: q },
+      );
       // Scambio: si alternano le fasi d'attacco finché qualcuno fa punto.
       let att: TeamIndex = receiving;
       let first = recv;
@@ -555,6 +594,7 @@ function playRallyMut(s: MatchState): void {
         // Limite di sicurezza: scambio infinito risolto a caso.
         const t: TeamIndex = rng.chance(0.5) ? 0 : 1;
         outcome = { team: t, cause: 'kill', playerId: s.setup.teams[t].players[0].id, touches };
+        ctx.actions.push({ kind: 'attack', team: t, player: 0, result: 'point' });
       }
     }
   }
@@ -563,7 +603,7 @@ function playRallyMut(s: MatchState): void {
   for (const t of [0, 1] as const) for (const i of [0, 1]) drain(ctx, t, i, 0.12);
 
   s.rngState = rng.getState();
-  applyPoint(s, outcome);
+  applyPoint(s, { ...outcome, actions: ctx.actions });
 }
 
 function applyPoint(s: MatchState, o: PointOutcome): void {
@@ -589,6 +629,8 @@ function applyPoint(s: MatchState, o: PointOutcome): void {
     score: [score[0], score[1]],
     setPoint: sp,
     highlight,
+    actions: o.actions,
+    sunFacing: s.sunFacing,
   });
 
   // Rotazione del servizio: se la squadra in ricezione vince lo scambio, conquista il servizio

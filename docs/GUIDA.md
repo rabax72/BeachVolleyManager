@@ -53,6 +53,7 @@ Dal tabellone del torneo, **Gioca in diretta** apre la partita commentata. In al
 
 - **Regole**: al meglio dei 3 set; i primi due a 21, il terzo a 15, sempre con almeno 2 punti di scarto. Si cambia campo ogni 7 punti (ogni 5 nel terzo set). L'ordine al servizio si alterna come nel regolamento.
 - **Controlli**: avvio/pausa, punto successivo, velocità (lenta, normale, veloce, istantanea) e "simula fino alla fine".
+- **Campo**: una vista dall'alto mostra i quattro giocatori e la palla che ripercorre ogni scambio (battuta, ricezione, alzata, attacco, muro, difesa). La velocità scelta regola anche l'animazione (con "istantanea" non c'è animazione); **Rivedi il punto** ripete l'ultimo scambio. Si può nascondere con "Mostra campo".
 - **Timeout**: uno per set. Spezza l'inerzia avversaria e fa recuperare un po' di energia.
 - **Tattica**: si può cambiare in qualunque momento.
 

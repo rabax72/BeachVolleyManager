@@ -36,11 +36,18 @@ export interface Settings {
   language: string;
   /** Millisecondi tra un punto e l'altro nella partita commentata. */
   matchSpeed: number;
+  /** Rappresentazione grafica del campo nella partita in diretta. */
+  showCourt: boolean;
   autosave: boolean;
 }
 
 const SETTINGS_KEY = 'bvm:settings';
-const DEFAULT_SETTINGS: Settings = { language: 'it', matchSpeed: 900, autosave: true };
+const DEFAULT_SETTINGS: Settings = {
+  language: 'it',
+  matchSpeed: 900,
+  showCourt: true,
+  autosave: true,
+};
 
 function loadSettings(): Settings {
   try {
